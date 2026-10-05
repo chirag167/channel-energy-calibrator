@@ -211,68 +211,7 @@ s.fit.m, s.fit.b
   applied.
 - Large event files (around a million rows) take a few seconds to load.
 
-## 8. Putting it on GitHub
-
-One-time setup: install git (macOS: run `xcode-select --install`), make a
-free account at github.com, and tell git who you are:
-
-```bash
-git config --global user.name  "Your Name"
-git config --global user.email "you@example.com"
-```
-
-**Real data stays out of the repository:** the .gitignore file excludes the
-measured spectra in examples/ (files starting with `li7`), so only the
-manufactured example data is uploaded. Check with your group before you ever
-add measured data to a public repository.
-
-Step 1 - create an empty repository on the website.
-On github.com click "+" (top right) > "New repository". Give it a name such as
-`channel-energy-calibrator`, choose Public or Private, and leave "Add a README",
-".gitignore" and "license" unticked (this folder already has them).
-Click "Create repository".
-
-Step 2 - turn this folder into a git repository and upload it.
-In a terminal, inside this folder:
-
-```bash
-git init
-git add .
-git status                  # check the list: no .venv, no __pycache__
-git commit -m "First version of the channel-to-energy calibrator"
-git branch -M main
-git remote add origin git@github.com:<your-username>/<repo-name>.git
-git push -u origin main
-```
-
-Replace `<your-username>` and `<repo-name>` with your own; the exact address
-is under the green "Code" button > "SSH" on the repository page. This uses SSH,
-which needs an SSH key added to your GitHub account (github.com > Settings >
-SSH and GPG keys); `ssh -T git@github.com` should reply "Hi <your-username>!".
-
-If you set the wrong address, change it with:
-
-```bash
-git remote set-url origin git@github.com:<your-username>/<repo-name>.git
-git remote -v               # shows the address now in use
-```
-
-"Repository not found" when pushing usually means the address is wrong (a typo,
-or a placeholder left in) or the repository has not been created on github.com.
-
-Step 3 - later changes.
-
-```bash
-git add .
-git commit -m "Describe what you changed"
-git push
-```
-
-The .gitignore file in this folder keeps the virtual environment (.venv),
-Python caches and test output out of the repository. Optional: add a LICENSE
-file (MIT is a common choice for research code) so others know how they may use it.
-
-## 9. Measuring how long the GUI takes to start
+## 8. Measuring how long the GUI takes to start
 
 `time python run_gui.py` does not measure start-up. It keeps counting until you
 close the window, so it measures your whole session. Instead, run this from
