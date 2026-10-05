@@ -28,34 +28,7 @@ pip install -r requirements.txt
 
 Each later session only needs the `activate` line.
 
-## 2. Run
-
-```bash
-python run_gui.py
-python run_gui.py examples/example_events.csv     # open a file straight away
-```
-
-To try it without real data, run `python examples/make_example_spectra.py`
-(the two example files are already included). The example peaks follow
-E = 0.002557*ch + 0.054, so a good calibration should land close to that.
-
-Real data from detector 0, disk 22 (taken from DISK_22/adc_tdc_0_disk22.txt):
-
-| File | Contents |
-|---|---|
-| `li7_ca48_adc_ch0.csv` | all ADC channels, no gate (6217 events) |
-| `li7_ca48_adc_ch0_alpha.csv` | alpha gate, first 50 points of coordinates_0.txt (3556 events) |
-| `li7_ca48_adc_ch0_proton.csv` | proton gate, remaining points (1103 events) |
-
-These have few counts per peak, so use 8 or more channels per bin.
-
-Example level list for the example files:
-
-```text
-9.656, 6.549, 5.958, 5.450, 5.261, 4.849, 4.708, 4.448
-```
-
-## 3. Input file
+## 2. Input file
 
 A `.csv` file with no header row, in either form:
 - 1 column: one ADC channel per event (the tool counts them)
@@ -63,6 +36,56 @@ A `.csv` file with no header row, in either form:
 
 Any other file type is refused, with a message asking you to convert it to CSV.
 The polygon gating on the ADC vs TDC plot is done before this step.
+
+## 3. Run
+
+```bash
+python run_gui.py                                  # empty window, use File > Upload
+python run_gui.py examples/example_events.csv      # open a file straight away
+```
+
+### Example: try it on manufactured data
+
+The `examples/` folder has two small test spectra. They are **made up, not
+measured**: `examples/make_example_spectra.py` generates them. It places eight
+Gaussian peaks (10 channels wide) at the channels you would get if the
+calibration were exactly E = 0.002557 * channel + 0.054 MeV, and adds a falling
+background. A fixed random seed means the script always writes the same files.
+
+| File | Format |
+|---|---|
+| `example_events.csv` | 1 column: one ADC channel per event |
+| `example_histogram.csv` | 2 columns: ADC channel, counts (the same spectrum, already counted) |
+
+Because the true calibration is known, you can check that the tool recovers it:
+
+1. Open the file:
+
+   ```bash
+   python run_gui.py examples/example_events.csv
+   ```
+
+2. Leave the binning at 1 channel per bin and type these energy levels (MeV),
+   then press Enter:
+
+   ```text
+   9.656, 6.549, 5.958, 5.450, 5.261, 4.849, 4.708, 4.448
+   ```
+
+3. Click the tall peak near channel 3755. This anchors 9.656 MeV.
+4. Press Enter to record the anchor.
+5. For each remaining level, press `c` (snap the selected line to its peak),
+   then Enter (record it). The next level is selected automatically.
+
+After all eight levels are recorded, the fit panel should show
+m ≈ 0.002557 MeV/channel and b ≈ 0.055 MeV, and the residual panel an RMS of
+about 1 keV.
+
+To recreate the two files:
+
+```bash
+python examples/make_example_spectra.py
+```
 
 ## 4. How a calibration goes
 
@@ -198,10 +221,10 @@ git config --global user.name  "Your Name"
 git config --global user.email "you@example.com"
 ```
 
-**Before you make the repository public:** the examples/ folder holds real
-experimental data (the li7_ca48_*.csv files). Check with your group that it can
-be shared. If not, make the repository private, or remove those files from
-examples/ before the first commit.
+**Real data stays out of the repository:** the .gitignore file excludes the
+measured spectra in examples/ (files starting with `li7`), so only the
+manufactured example data is uploaded. Check with your group before you ever
+add measured data to a public repository.
 
 Step 1 - create an empty repository on the website.
 On github.com click "+" (top right) > "New repository". Give it a name such as
