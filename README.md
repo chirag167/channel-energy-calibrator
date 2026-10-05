@@ -6,9 +6,31 @@ the rest up while seeing the fit and residuals update as you go.
 
 Convention used throughout:  **E = m * channel + b**  (E in MeV).
 
-## 1. Setup (one time, any OS)
+## 1. Get the code
 
-Needs Python 3.9 or newer. From inside this folder:
+You need git (macOS: run `xcode-select --install` if `git --version` fails).
+Clone the repository and go into the new folder:
+
+```bash
+git clone https://github.com/chirag167/channel-energy-calibrator.git
+cd channel-energy-calibrator
+```
+
+If you have an SSH key set up with GitHub, you can clone with SSH instead:
+
+```bash
+git clone git@github.com:chirag167/channel-energy-calibrator.git
+```
+
+To get later updates, run this from inside the folder:
+
+```bash
+git pull
+```
+
+## 2. Setup (one time, any OS)
+
+Needs Python 3.9 or newer. From inside the `channel-energy-calibrator` folder:
 
 macOS / Linux:
 
@@ -28,7 +50,7 @@ pip install -r requirements.txt
 
 Each later session only needs the `activate` line.
 
-## 2. Input file
+## 3. Input file
 
 A `.csv` file with no header row, in either form:
 - 1 column: one ADC channel per event (the tool counts them)
@@ -37,7 +59,7 @@ A `.csv` file with no header row, in either form:
 Any other file type is refused, with a message asking you to convert it to CSV.
 The polygon gating on the ADC vs TDC plot is done before this step.
 
-## 3. Run
+## 4. Run
 
 ```bash
 python run_gui.py                                  # empty window, use File > Upload
@@ -87,7 +109,7 @@ To recreate the two files:
 python examples/make_example_spectra.py
 ```
 
-## 4. How a calibration goes
+## 5. How a calibration goes
 
 1. File > Upload the spectrum.
 2. Type the energy levels (MeV, comma-separated) and press Enter. The first
@@ -109,7 +131,7 @@ python examples/make_example_spectra.py
 Line colours: orange dashed = not recorded yet, green = recorded,
 violet = selected.
 
-## 5. Controls
+## 6. Controls
 
 Click a panel first so it receives the keyboard.
 
@@ -149,7 +171,7 @@ Recorded points never move when you shift or stretch the trial m and b.
 Fit errors on m and b are ordinary least-squares standard errors and appear
 once there are 3 or more points.
 
-## 6. How the code is organised (a short guide to the classes)
+## 7. How the code is organised (a short guide to the classes)
 
 ```text
 run_gui.py                 starts the app
@@ -185,7 +207,7 @@ s.anchor(3755.0); s.record(s.levels[0])
 s.fit.m, s.fit.b
 ```
 
-## 7. Current limitations
+## 8. Current limitations
 
 - Linear calibration only: E = m * channel + b. There is no quadratic or other
   non-linear option.
@@ -211,7 +233,7 @@ s.fit.m, s.fit.b
   applied.
 - Large event files (around a million rows) take a few seconds to load.
 
-## 8. Measuring how long the GUI takes to start
+## 9. Measuring how long the GUI takes to start
 
 `time python run_gui.py` does not measure start-up. It keeps counting until you
 close the window, so it measures your whole session. Instead, run this from
